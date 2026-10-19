@@ -88,3 +88,21 @@ Run the test suite after installing development dependencies
 and preparing the dataset and model artifacts:
 
     python -m pytest tests/ -v
+
+## Dataset Preparation
+
+This project uses the **Financial PhraseBank (AllAgree)** dataset.
+
+1. Obtain the original `FinancialPhraseBank-v1.0.zip` archive.
+2. Place it in `data/FinancialPhraseBank-v1.0.zip`.
+3. From the project root, run:
+
+    python src/prepare_data.py
+
+The script removes duplicate sentences and creates stratified
+training (80%), validation (10%), and test (10%) splits using
+random seed 42.
+
+The resulting CSV files are saved in `data/processed/`.
+
+Dataset files are excluded from Git to keep the repository lightweight.
