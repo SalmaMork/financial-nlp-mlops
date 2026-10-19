@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local datasets and model weights
+data/*
+!data/.gitkeep
+models/*
+!models/.gitkeep
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Python packaging
+*.egg-info/
+build/
+dist/

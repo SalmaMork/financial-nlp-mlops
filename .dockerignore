@@ -1,0 +1,12 @@
+.venv/
+.git/
+.pytest_cache/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+data/
+notebooks/
+reports/
+models/distilbert-checkpoints/
+models/baseline.pkl

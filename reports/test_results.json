@@ -1,0 +1,15 @@
+{
+  "dataset": "Financial PhraseBank - AllAgree",
+  "test_examples": 226,
+  "split_seed": 42,
+  "models": {
+    "tfidf_logistic_regression": {
+      "accuracy": 0.9071,
+      "macro_f1": 0.8837
+    },
+    "distilbert": {
+      "accuracy": 0.9602,
+      "macro_f1": 0.9451
+    }
+  }
+}
