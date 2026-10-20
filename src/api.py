@@ -2,23 +2,21 @@
 
 from contextlib import asynccontextmanager
 
-import torch
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel, Field
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-MODEL_PATH = "SalmaMork/financial-sentiment-distilbert"
-model = None
-tokenizer = None
+try:
+    from src.predictor import SentimentPredictor
+except ModuleNotFoundError:
+    from predictor import SentimentPredictor
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global model, tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
-    model.eval()
+    """Load the sentiment model when the API starts."""
+    app.state.predictor = SentimentPredictor()
     yield
+    del app.state.predictor
 
 
 app = FastAPI(
@@ -39,21 +37,5 @@ def health():
 
 
 @app.post("/predict")
-def predict(request: PredictionRequest):
-    inputs = tokenizer(
-        request.text,
-        return_tensors="pt",
-        truncation=True,
-        max_length=128,
-    )
-
-    with torch.no_grad():
-        logits = model(**inputs).logits
-        probabilities = torch.softmax(logits, dim=-1)[0]
-
-    predicted_id = int(probabilities.argmax())
-
-    return {
-        "sentiment": model.config.id2label[predicted_id],
-        "confidence": round(float(probabilities[predicted_id]), 4),
-    }
+def predict(payload: PredictionRequest, request: Request):
+    return request.app.state.predictor.predict(payload.text)
