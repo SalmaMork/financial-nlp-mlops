@@ -106,3 +106,36 @@ random seed 42.
 The resulting CSV files are saved in `data/processed/`.
 
 Dataset files are excluded from Git to keep the repository lightweight.
+
+## Software Engineering: OOP and Continuous Integration
+
+### Object-Oriented Model Inference
+
+The FastAPI service uses a reusable `SentimentPredictor` class in
+`src/predictor.py` to organize model loading, tokenization, and inference.
+
+- Loads the fine-tuned DistilBERT model from Hugging Face.
+- Uses PyTorch inference mode for predictions.
+- Returns the predicted sentiment and confidence score.
+- Separates machine learning inference logic from API routing.
+
+### Continuous Integration (CI)
+
+GitHub Actions automatically runs API integration tests on every push
+and pull request.
+
+The workflow is defined in `.github/workflows/tests.yml`.
+
+The automated tests verify:
+- The `/health` endpoint returns a successful response.
+- The `/predict` endpoint returns a valid sentiment and confidence score.
+
+Run the CI tests locally:
+
+```bash
+python -m pytest tests/test_api.py -q
+
+
+```
+
+Additional tests for data preparation, the baseline model, and the fine-tuned transformer require local datasets or model files.
